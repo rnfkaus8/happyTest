@@ -55,9 +55,6 @@ public class AddUser extends HttpServlet {
 			response.sendRedirect("./WEB-INF/view/error.jsp");
 		}
 		
-		System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
-		System.out.println("문리버");
-	
 	
 	}
 	
