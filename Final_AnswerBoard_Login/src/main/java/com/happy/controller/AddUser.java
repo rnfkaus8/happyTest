@@ -56,6 +56,9 @@ public class AddUser extends HttpServlet {
 		}
 		
 		System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+		System.out.println("문리버");
+	
+	
 	}
 	
 	public void forwardDispatcher(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
