@@ -1,0 +1,99 @@
+@charset "UTF-8";
+/*디자인은 큰틀부터 디자인하자.*/
+body{
+	text-align: center;
+}
+h1{
+	height: 60px;
+	text-align: center;
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+#BoardList {
+	width: 550px;
+/* 	border: 1px solid black; */
+	/*겉테두리와 안테두리를 하나로 합쳐준다. */
+	border-collapse: collapse;
+	margin: 40px auto 40px auto;
+	text-align: center;
+}
+#detailBoard{
+	width: 550px;
+	border: 1px solid black;
+	/*겉테두리와 안테두리를 하나로 합쳐준다. */
+	border-collapse: collapse;
+	margin: 40px auto 40px auto;
+	text-align: center;
+}
+.boardColor{
+	background-color: #aaffff;
+}
+textarea{
+	width: 540px;
+	height: 260px;
+}
+/* 누구 자식인지 반드시 명시해 준다.*/
+#BoardList td, #BoardList th {
+	border: 1px solid black;
+	padding: 3px;
+	text-align: center;
+}
+#BoardList .tablebutton{
+	border: none;
+}
+#detailBoard td, #detailBoard th {
+	border: 1px solid black;
+	padding: 3px;
+	text-align: center;
+}
+#BoardList th {
+	background-color: aqua;
+}
+
+#BoardList .seq {
+	width: 50px;
+	text-align: center;
+}
+
+#BoardList .title {
+	width: 200px;
+	text-align: center;
+}
+
+#BoardList .id {
+	width: 100px;
+	text-align: center;
+}
+
+/* #BoardList .readCount { */
+/* 	width: 50px; */
+/* 	text-align: center; */
+/* } */
+
+#BoardList .readCount {
+	width: 50px;
+	text-align: center;
+}
+#BoardList .tablebutton{
+	border: none;
+}
+a:link{
+	color: black;
+	text-decoration: none;
+}
+a:visited {
+	color: black;
+	text-decoration: none;
+}
+a:hover {
+	color: aqua;
+}
+#buttomBtn{
+	text-align: center;
+	margin: 40px auto 40px auto;
+}
+
+/*부모 자식 관계 */
+/* #BoardList .altRow { */
+/* 	background-color: #e0f0b5; */
+/* } */

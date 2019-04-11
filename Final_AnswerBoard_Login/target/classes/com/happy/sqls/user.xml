@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="happy.user">
+
+	<!-- 전체 사용자 -->
+	<select id="getAllUserStatus" parameterType="com.happy.dto.HappyBoardPagingDto" resultType="UDto">
+		SELECT X.SEQ SEQ, X.ID ID, X.PASSWORD PASSWORD,
+			X.NAME NAME, X.ADDRESS ADDRESS, 
+			X.PHONE PHONE, X.EMAIL EMAIL, X.ENABLE ENABLE,
+			X.AUTH AUTH
+			FROM (SELECT ROWNUM AS RN, A.SEQ, A.ID, A.PASSWORD,
+					A.NAME, A.ADDRESS, A.PHONE, A.EMAIL, A.ENABLE, A.AUTH
+				FROM (SELECT SEQ, ID, PASSWORD, NAME, ADDRESS, PHONE,
+						EMAIL, ENABLE, AUTH FROM HAPPYMEMBER ORDER BY SEQ DESC) A) X
+				WHERE RN BETWEEN #{startList} AND #{endList}
+	</select>
+
+
+	<!-- 전체 사용 사용자 -->
+	<select id="getAllUser" parameterType="com.happy.dto.HappyBoardPagingDto" resultType="UDto">
+		SELECT X.SEQ SEQ, X.ID ID, X.PASSWORD PASSWORD,
+			X.NAME NAME, X.ADDRESS ADDRESS, 
+			X.PHONE PHONE, X.EMAIL EMAIL, X.ENABLE ENABLE,
+			X.AUTH AUTH
+			FROM (SELECT ROWNUM AS RN, A.SEQ,
+					A.ID, A.PASSWORD,
+					A.NAME, A.ADDRESS, A.PHONE,
+					A.EMAIL, A.ENABLE, A.AUTH
+				FROM (SELECT SEQ, ID, PASSWORD,
+						NAME, ADDRESS, PHONE,
+						EMAIL, ENABLE, AUTH
+						FROM HAPPYMEMBER
+						WHERE ENABLE = 'Y'
+						ORDER BY SEQ DESC) A) X
+		WHERE RN BETWEEN #{startList} AND #{endList}
+	</select>
+
+
+	<!-- 권한 수정 -->
+	<update id="updateAuthUser" parameterType="java.util.Map">
+		UPDATE HAPPYMEMBER SET AUTH = #{auth} WHERE SEQ=#{seq}
+	</update>
+
+
+	<!-- 사용자 입력 -->
+	<insert id="insertUser" parameterType="UDto">
+		INSERT INTO HAPPYMEMBER
+		(SEQ, ID, PASSWORD, NAME, ADDRESS, PHONE, EMAIL, ENABLE, AUTH)
+		VALUES(HAPPYMEMBER_SEQ.NEXTVAL, #{id}, #{password}, #{name}, #{address}, #{phone},
+		#{email}, 'Y', 'USER')
+	</insert>
+
+	<!-- 로그인 -->
+	<select id="getLogin" parameterType="java.util.Map" resultType="UDto">
+		SELECT SEQ, ID, PASSWORD, NAME, ADDRESS, PHONE, EMAIL, ENABLE, AUTH
+		FROM HAPPYMEMBER
+		WHERE UPPER(ID)=UPPER(#{id}) AND PASSWORD=#{password}
+	</select>
+
+
+	<!-- 사용자 정보 -->
+	<select id="getUserInfo" parameterType="java.lang.String" resultType="UDto">
+		SELECT SEQ, ID, PASSWORD, NAME, ADDRESS, PHONE, EMAIL, ENABLE, AUTH
+		FROM HAPPYMEMBER
+		WHERE SEQ = #{seq}
+	</select>
+
+	<!-- 사용자 수정 -->
+	<update id="updateUserInfo" parameterType="java.util.Map">
+		UPDATE HAPPYMEMBER SET ADDRESS = #{address}, PHONE = #{phone},
+		EMAIL = #{email} WHERE SEQ = #{seq}
+	</update>
+
+	<!-- 사용자 삭제 -->
+	<update id="delUser" parameterType="java.lang.String">
+		UPDATE HAPPYMEMBER SET ENABLE = 'N' WHERE SEQ = #{seq}
+	</update>
+
+	<!-- 아이디 중복 확인 -->
+	<select id="duplicateId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT ID FROM HAPPYMEMBER WHERE UPPER(ID) = UPPER(#{id})
+	</select>
+
+	<select id="countAllUser" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM HAPPYMEMBER
+	</select>
+	
+	<select id="countEnableUser" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM HAPPYMEMBER WHERE ENABLE = 'Y'
+	</select>
+	
+	
+
+</mapper>

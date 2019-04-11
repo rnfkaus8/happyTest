@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.answerboard">
+<!-- 전체 조회 -->
+	<select id="selectAllBoard" resultType="Adto">
+		SELECT SEQ, ID, TITLE,
+		REFER, STEP, DEPTH,
+		READCOUNT, DELFALG, REGDATE
+		FROM ANSWERBOARD
+		ORDER BY
+		REFER DESC, STEP
+	</select>
+
+	<!-- 상세 조회 -->
+	<select id="selectdetailBoard" parameterType="java.lang.String"
+		resultType="Adto">
+		SELECT SEQ, ID, TITLE, CONTENT, REGDATE, FILENAME, ORGFILE
+		FROM ANSWERBOARD
+		WHERE SEQ=#{seq}
+	</select>
+
+	<!-- 답글 -->
+	<update id="replyUpdate" parameterType="Adto">
+		UPDATE ANSWERBOARD
+		SET
+		STEP = STEP + 1
+		WHERE REFER = (SELECT REFER FROM ANSWERBOARD WHERE SEQ
+		= #{seq})
+		AND STEP > (SELECT STEP FROM ANSWERBOARD WHERE SEQ = #{seq})
+	</update>
+
+	<insert id="replyInsert" parameterType="Adto">
+		INSERT INTO ANSWERBOARD(SEQ, ID, TITLE,
+		CONTENT, REFER, STEP,
+		"DEPTH",
+		READCOUNT, DELFALG, REGDATE)
+		VALUES(ANSWERBOARD_SEQ.NEXTVAL, #{id},
+		#{title},
+		#{content},
+		(SELECT REFER FROM ANSWERBOARD WHERE SEQ =
+		#{seq}),
+		(SELECT STEP FROM ANSWERBOARD WHERE SEQ = #{seq})+1,
+		(SELECT
+		"DEPTH" FROM ANSWERBOARD WHERE SEQ = #{seq}) + 1,
+		0, 'N', SYSDATE)
+		<selectKey keyProperty="id" resultType="java.lang.String">
+			SELECT #{id} ID FROM
+			DUAL
+		</selectKey>
+	</insert>
+
+	<!-- 글 수정 -->
+	<update id="modifyBoard" parameterType="Adto">
+		UPDATE ANSWERBOARD SET
+		TITLE=#{title},
+		CONTENT = #{content}
+		WHERE SEQ = #{seq}
+	</update>
+
+	<!-- 글 삭제 변경 -->
+	<update id="deleteBoard" parameterType="java.lang.String">
+		UPDATE ANSWERBOARD SET
+		DELFALG = 'Y'
+		WHERE SEQ = #{seq}
+	</update>
+
+	<!-- 새 글 입력 -->
+	<insert id="insertBoardFile" parameterType="Adto">
+		INSERT INTO ANSWERBOARD(SEQ, ID, TITLE,
+		CONTENT, REFER, STEP,
+		DEPTH, READCOUNT, DELFALG, REGDATE, FILENAME, ORGFILE)
+		VALUES(ANSWERBOARD_SEQ.NEXTVAL, #{id},
+		#{title}, #{content},
+		(SELECT NVL(MAX(REFER),0) + 1 FROM ANSWERBOARD),
+		0, 0, 0, 'N', SYSDATE, #{filename}, #{orgfile})
+
+		<selectKey keyProperty="id" resultType="java.lang.String">
+			SELECT #{id} ID FROM
+			DUAL
+		</selectKey>
+	</insert>
+	<insert id="insertBoard" parameterType="Adto">
+		INSERT INTO ANSWERBOARD(SEQ, ID, TITLE,
+		CONTENT, REFER, STEP,
+		DEPTH, READCOUNT, DELFALG, REGDATE)
+		VALUES(ANSWERBOARD_SEQ.NEXTVAL, #{id},
+		#{title}, #{content},
+		(SELECT NVL(MAX(REFER),0) + 1 FROM ANSWERBOARD),
+		0, 0, 0, 'N', SYSDATE)
+
+		<selectKey keyProperty="id" resultType="java.lang.String">
+			SELECT #{id} ID FROM
+			DUAL
+		</selectKey>
+	</insert>
+
+	<!-- 조회수 증가 -->
+	<update id="readBoard" parameterType="java.lang.String">
+		UPDATE ANSWERBOARD SET
+		READCOUNT = READCOUNT + 1
+		WHERE SEQ = #{seq}
+	</update>
+
+	<!-- 글 진짜 삭제 -->
+	<delete id="deleteBoardReal" parameterType="java.lang.String">
+		DELETE FROM
+		ANSWERBOARD WHERE SEQ = #{seq}
+	</delete>
+
+	<!-- 다중삭제 -->
+	<update id="multiDelete" parameterType="java.lang.String">
+		UPDATE ANSWERBOARD SET
+		DELFALG = 'Y'
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<!-- 총 페이지 갯수 구하는 쿼리-->
+	<select id="countPage" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM
+		ANSWERBOARD
+	</select>
+
+	
+	<!-- 페이지 별 화면에 출력할 시작 rownum부터 끝 rownum까지 List를 받아오는 쿼리  -->
+	<select id="selectPaging" parameterType="com.happy.dto.HappyBoardPagingDto"
+		resultType="Adto">
+		SELECT SEQ, ID, TITLE,REFER, STEP, DEPTH,READCOUNT, DELFALG, REGDATE
+		FROM (SELECT SEQ, ID, TITLE,REFER, STEP, DEPTH,READCOUNT, DELFALG, REGDATE, ROWNUM RN
+				FROM (SELECT SEQ, ID, TITLE,REFER, STEP, DEPTH,READCOUNT, DELFALG, REGDATE
+	  					FROM ANSWERBOARD ORDER BY SEQ DESC, REFER ASC, DEPTH ASC, STEP ASC))
+		WHERE RN BETWEEN #{startList} AND #{endList}
+	</select>
+</mapper>
