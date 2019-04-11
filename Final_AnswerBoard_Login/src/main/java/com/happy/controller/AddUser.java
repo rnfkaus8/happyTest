@@ -31,7 +31,9 @@ public class AddUser extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		IUserDao uDao = new UserDaoImpl();
 		
+
 		String id = request.getParameter("identifier");
+
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		String address = request.getParameter("address");
@@ -55,7 +57,6 @@ public class AddUser extends HttpServlet {
 			response.sendRedirect("./WEB-INF/view/error.jsp");
 		}
 		
-	
 	}
 	
 	public void forwardDispatcher(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
