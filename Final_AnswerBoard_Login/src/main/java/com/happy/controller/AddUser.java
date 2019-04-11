@@ -32,7 +32,7 @@ public class AddUser extends HttpServlet {
 		IUserDao uDao = new UserDaoImpl();
 		
 
-		String id = request.getParameter("identifier");
+		String id = request.getParameter("id");
 
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
