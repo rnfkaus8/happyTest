@@ -54,6 +54,8 @@ public class AddUser extends HttpServlet {
 		}else{
 			response.sendRedirect("./WEB-INF/view/error.jsp");
 		}
+		
+		System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
 	}
 	
 	public void forwardDispatcher(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
