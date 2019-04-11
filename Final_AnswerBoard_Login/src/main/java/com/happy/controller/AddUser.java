@@ -16,10 +16,10 @@ import com.happy.dao.UserDaoImpl;
 import com.happy.dto.UserDto;
 
 @WebServlet("/AddUser")
-public class AddUser extends HttpServlet {
+public class addUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Logger logger = Logger.getLogger(AddUser.class);
-    public AddUser() {
+	private Logger logger = Logger.getLogger(addUser.class);
+    public addUser() {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
